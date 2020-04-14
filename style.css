@@ -6,11 +6,10 @@
      height: 100%;
 }
  body {
-	 background-image: url("img/MountainNightStars.png");
-	 background-repeat: no-repeat;
-	 background-attachment: fixed;
-	 background-size: cover;
-	 background-position: 45%;
+     background: linear-gradient(217deg, rgba(255,0,0,.05), rgba(255,0,0,0) 60%),
+                 linear-gradient(127deg, rgba(0,255,0,.05), rgba(0,255,0,0) 30%),
+                 linear-gradient(336deg, rgba(0,0,255,0.1), rgba(0,0,255,0) 60%),
+                 linear-gradient(0deg, #252727, #312f2f);
      font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
      font-size: 1rem;
      color: #222;
@@ -18,16 +17,18 @@
  .container\:fluid {
      height: 100%;
 }
+
  .container\:fluid > .row {
      height: 100%;
 }
+
  .container\:fluid > .row .xl {
      margin: 1rem 0;
 }
 
 @media (min-width: 600px) {
  .container\:fluid > .row .xl {
-		max-width: 900px;
+		max-width: 1200px;
 }
 
 }
@@ -36,13 +37,12 @@
      flex-direction: column;
      background-color: #eee;
      border-radius: 10px;
-     box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
 }
  .card .card\:header {
      display: flex;
      width: 100%;
      padding: 1rem;
-     background-color: #1e262d;
+     background-color: #353535;
      color: #eee;
      border-top-left-radius: 8px;
      border-top-right-radius: 8px;
@@ -73,7 +73,7 @@
      width: auto;
      height: 57px;
      border-radius: 20%;
-     border: 2px solid #2d3844;
+     border: 2px solid #151a19;
 }
  .card .card\:content ul {
      margin: 0;
@@ -135,30 +135,4 @@
 }
  .card .card\:content ul li:last-of-type a {
      padding: calc(1rem + .5px) 1.5rem calc(1rem + .5px) 1.5rem;
-}
- .footer {
-     margin: .5rem 0 0;
-     text-align: center;
-}
- .footer a {
-     text-decoration: none;
-     outline: none;
-}
- .footer a:hover, .footer a:focus, .footer a:active, .footer a:hover:active {
-     text-decoration: none;
-     outline: none;
-}
- .footer svg {
-     position: relative;
-     top: 1px;
-     width: auto;
-     height: 12px;
-     margin: 0 5px;
-}
- .footer img {
-     margin: 0 0 0 7px;
-     width: auto;
-     height: 14px;
-     vertical-align: middle;
-     border-style: none;
 }
