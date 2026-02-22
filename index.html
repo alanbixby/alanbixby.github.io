@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alan Bixby</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem 1rem; /* Added padding to body so the card never touches the edges on mobile */
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #050505, #0f172a, #062029, #1f0f15);
+            background-size: 400% 400%;
+            background-attachment: fixed; /* Crucial: Keeps the background still even if the user scrolls */
+            animation: gradientBG 20s ease infinite;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Reverted from 100dvh to prevent height-jumping bugs */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animated Blob that follows the mouse */
+        #blob {
+            background: linear-gradient(to right, #00f2fe, #ff7e5f);
+            height: 40vmax;
+            aspect-ratio: 1;
+            position: fixed; /* Prevents expanding document bounds */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Bulletproof centering */
+            border-radius: 50%;
+            animation: rotate 20s infinite;
+            opacity: 0.6;
+            filter: blur(8vmax);
+            z-index: 1;
+            transition: opacity 0.3s ease;
+            pointer-events: none; /* Prevents intercepting taps/scrolls */
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) scale(1, 1.2); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Glass blur overlay to smooth the background */
+        #blur-overlay {
+            position: fixed; /* Fixed prevents scrollbars */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            backdrop-filter: blur(12vmax);
+            -webkit-backdrop-filter: blur(12vmax);
+            pointer-events: none; /* Prevents intercepting taps/scrolls */
+        }
+
+        /* 3D Perspective container */
+        .card-perspective {
+            perspective: 2000px;
+            z-index: 10;
+            width: 100%;
+            max-width: 64rem;
+            margin: auto; /* Magic fix: Prevents the top of the card from being cut off on very small phones */
+        }
+
+        /* The actual white card */
+        .business-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            position: relative;
+            will-change: transform;
+        }
+
+        /* Smooth reset transition when mouse leaves */
+        .business-card.resetting {
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .card-content {
+            transform: translateZ(50px);
+        }
+        
+        .headshot-container {
+            position: relative;
+            transform: translateZ(70px);
+        }
+        
+        .qr-container {
+            transform: translateZ(40px);
+        }
+    </style>
+</head>
+<body class="text-gray-900 selection:bg-blue-200">
+
+    <!-- Background Elements -->
+    <div id="blob"></div>
+    <div id="blur-overlay"></div>
+
+    <!-- Card Container -->
+    <div class="card-perspective">
+        <div id="card" class="business-card w-full p-6 md:p-12 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative overflow-hidden">
+            
+            <!-- Subtle card texture/shine -->
+            <div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none rounded-[1.5rem]"></div>
+
+            <!-- Left: Headshot -->
+            <div class="headshot-container shrink-0">
+                <div class="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                    <img src="Headshot_White.png" alt="Alan Bixby" class="w-full h-full object-cover object-top">
+                </div>
+            </div>
+
+            <!-- Middle: Details -->
+            <div class="card-content flex-1 text-center md:text-left flex flex-col justify-center w-full">
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-1">Alan Bixby</h1>
+                <p class="text-xs md:text-sm font-bold text-blue-700 uppercase tracking-wide mb-1.5">Senior Programmer / Development Analyst</p>
+                <p class="text-sm md:text-base text-gray-500 font-medium mb-1"><a href="https://visionsfcu.org">@ Visions Federal Credit Union</a></p>
+                
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-5 md:mb-6 mt-1">
+                    <div class="flex items-center gap-1.5 text-gray-500">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        <span class="text-xs md:text-sm font-medium">Endicott, NY</span>
+                    </div>
+                    <!-- DevCon Live Badge (Auto-hides after March 1st) -->
+                    <div id="devcon-badge" class="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-bold border border-blue-100 shadow-sm transition-opacity duration-300">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        Jack Henry DevCon 2026
+                    </div>
+                </div>
+
+                <div class="w-full border-t border-gray-100 pt-5 md:pt-6 flex flex-col items-center md:items-start">
+                    <div class="space-y-3 flex flex-col items-start mb-6">
+                        <a href="mailto:abixby@visionsfcu.org" class="flex items-center gap-3 text-gray-600 hover:text-blue-700 transition-colors group whitespace-nowrap">
+                            <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors shrink-0"></i>
+                            <span class="font-medium text-sm md:text-base">abixby@visionsfcu.org</span>
+                        </a>
+                        <a href="mailto:alan@bxb.gg" class="flex items-center gap-3 text-gray-600 hover:text-blue-700 transition-colors group whitespace-nowrap">
+                            <i data-lucide="mail" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors shrink-0"></i>
+                            <span class="font-medium text-sm md:text-base">alan@bxb.gg</span>
+                        </a>
+                        <a href="https://linkedin.com/in/alanbixby" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-gray-600 hover:text-blue-700 transition-colors group whitespace-nowrap">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors shrink-0"></i>
+                            <span class="font-medium text-sm md:text-base">linkedin.com/in/alanbixby</span>
+                        </a>
+                    </div>
+
+                    <!-- Core Expertise Badges -->
+                    <div class="mt-1 w-full flex flex-col items-center md:items-start">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Core Expertise</p>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                            <!-- TypeScript (Solid Blue) -->
+                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 border border-blue-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                <i data-lucide="file-code" class="w-3.5 h-3.5 text-white/90"></i>
+                                TypeScript
+                            </span>
+                            <!-- Python (Solid Emerald Green) -->
+                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 border border-emerald-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                <i data-lucide="terminal" class="w-3.5 h-3.5 text-white/90"></i>
+                                Python
+                            </span>
+                            <!-- PowerOn / SymXchange (Solid Dark) -->
+                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-md text-xs font-bold text-white shadow-sm">
+                                <i data-lucide="server" class="w-3.5 h-3.5 text-white/90"></i>
+                                PowerOn / SymXchange
+                            </span>
+                            <!-- SQL (Solid Teal/Cyan) -->
+                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-600 border border-cyan-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                <i data-lucide="database" class="w-3.5 h-3.5 text-white/90"></i>
+                                SQL
+                            </span>
+                            <!-- Full Stack Development (Solid Purple) -->
+                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 border border-purple-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                <i data-lucide="layers" class="w-3.5 h-3.5 text-white/90"></i>
+                                Full Stack Development
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: QR Code -->
+            <div class="qr-container shrink-0 flex flex-col items-center justify-center pt-2 md:pt-0">
+                <div class="bg-white p-2 md:p-2.5 rounded-xl shadow-sm border border-gray-200">
+                    <img src="./LinkedIn_QR.png" 
+                         alt="QR Code to LinkedIn" 
+                         class="w-48 h-48 object-contain">
+                </div>
+                <span class="text-[9px] md:text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2 md:mt-3">Scan to Connect</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Check date to auto-hide the DevCon badge
+        const devconBadge = document.getElementById('devcon-badge');
+        if (devconBadge) {
+            // Cutoff date is March 1, 2026
+            const cutoffDate = new Date('2026-03-01T00:00:00');
+            const currentDate = new Date();
+            
+            if (currentDate >= cutoffDate) {
+                devconBadge.style.display = 'none';
+            }
+        }
+
+        // Background Blob Follow Mouse Logic
+        const blob = document.getElementById("blob");
+        
+        document.body.onpointermove = event => { 
+            const { clientX, clientY } = event;
+            blob.animate({
+                left: `${clientX}px`,
+                top: `${clientY}px`
+            }, { duration: 3000, fill: "forwards" });
+        };
+
+        // 3D Card Tilt Effect Logic
+        const card = document.getElementById('card');
+        const container = document.querySelector('.card-perspective');
+
+        container.addEventListener('mousemove', (e) => {
+            // Remove smoothing transition while actively moving
+            card.classList.remove('resetting');
+            
+            const rect = container.getBoundingClientRect();
+            
+            // Calculate mouse position relative to the center of the card container
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Calculate rotation degrees (max 10 degrees)
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // Reset the card position when the mouse leaves
+        container.addEventListener('mouseleave', () => {
+            card.classList.add('resetting');
+            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+</body>
+</html>
