@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alan Bixby</title>
+    <link rel="icon" href="./favicon.ico" sizes="any">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -106,6 +107,26 @@
         .qr-container {
             transform: translateZ(40px);
         }
+
+        .tab-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .tab-hidden {
+            opacity: 0;
+            transform: translateY(5px);
+            pointer-events: none;
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .tab-active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="text-gray-900 selection:bg-blue-200">
@@ -139,14 +160,6 @@
                         <i data-lucide="map-pin" class="w-4 h-4"></i>
                         <span class="text-xs md:text-sm font-medium">Endicott, NY</span>
                     </div>
-                    <!-- DevCon Live Badge (Auto-hides after March 1st) -->
-                    <div id="devcon-badge" class="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-bold border border-blue-100 shadow-sm transition-opacity duration-300">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                        </span>
-                        Jack Henry DevCon 2026
-                    </div>
                 </div>
 
                 <div class="w-full border-t border-gray-100 pt-5 md:pt-6 flex flex-col items-center md:items-start">
@@ -160,40 +173,70 @@
                             <span class="font-medium text-sm md:text-base">alan@bxb.gg</span>
                         </a>
                         <a href="https://linkedin.com/in/alanbixby" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-gray-600 hover:text-blue-700 transition-colors group whitespace-nowrap">
-                            <i data-lucide="linkedin" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors shrink-0"></i>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13Zm1.78 13.02H3.54V9H7.1v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z"/>
+                            </svg>
                             <span class="font-medium text-sm md:text-base">linkedin.com/in/alanbixby</span>
                         </a>
                     </div>
 
-                    <!-- Core Expertise Badges -->
-                    <div class="mt-1 w-full flex flex-col items-center md:items-start">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Core Expertise</p>
-                        <div class="flex flex-wrap justify-center md:justify-start gap-2">
-                            <!-- TypeScript (Solid Blue) -->
-                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 border border-blue-700 rounded-md text-xs font-bold text-white shadow-sm">
-                                <i data-lucide="file-code" class="w-3.5 h-3.5 text-white/90"></i>
-                                TypeScript
-                            </span>
-                            <!-- Python (Solid Emerald Green) -->
-                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 border border-emerald-700 rounded-md text-xs font-bold text-white shadow-sm">
-                                <i data-lucide="terminal" class="w-3.5 h-3.5 text-white/90"></i>
-                                Python
-                            </span>
-                            <!-- PowerOn / SymXchange (Solid Dark) -->
-                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-md text-xs font-bold text-white shadow-sm">
-                                <i data-lucide="server" class="w-3.5 h-3.5 text-white/90"></i>
-                                PowerOn / SymXchange
-                            </span>
-                            <!-- SQL (Solid Teal/Cyan) -->
-                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-600 border border-cyan-700 rounded-md text-xs font-bold text-white shadow-sm">
-                                <i data-lucide="database" class="w-3.5 h-3.5 text-white/90"></i>
-                                SQL
-                            </span>
-                            <!-- Full Stack Development (Solid Purple) -->
-                            <span class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 border border-purple-700 rounded-md text-xs font-bold text-white shadow-sm">
-                                <i data-lucide="layers" class="w-3.5 h-3.5 text-white/90"></i>
-                                Full Stack Development
-                            </span>
+                    <div class="w-full flex flex-col items-center md:items-start mt-2">
+                        <div class="flex p-1 space-x-1 bg-gray-100/70 rounded-xl mb-4 w-full md:w-max border border-gray-200/50">
+                            <button id="tab-btn-expertise" onclick="switchTab('expertise')" class="flex-1 md:flex-none px-4 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-gray-800 border border-gray-200 transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                                Core Expertise
+                            </button>
+                            <button id="tab-btn-freelance" onclick="switchTab('freelance')" class="flex-1 md:flex-none px-4 py-1.5 text-xs font-bold rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-200/50 transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="code" class="w-3.5 h-3.5"></i>
+                                Freelance Developer
+                            </button>
+                        </div>
+
+                        <div class="relative w-full">
+                            <div id="tab-content-expertise" class="tab-content tab-active w-full">
+                                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 border border-blue-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                        <i data-lucide="file-code" class="w-3.5 h-3.5 text-white/90"></i>
+                                        TypeScript
+                                    </span>
+                                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 border border-emerald-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                        <i data-lucide="terminal" class="w-3.5 h-3.5 text-white/90"></i>
+                                        Python
+                                    </span>
+                                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-md text-xs font-bold text-white shadow-sm">
+                                        <i data-lucide="server" class="w-3.5 h-3.5 text-white/90"></i>
+                                        PowerOn / SymXchange
+                                    </span>
+                                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-600 border border-cyan-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                        <i data-lucide="database" class="w-3.5 h-3.5 text-white/90"></i>
+                                        SQL
+                                    </span>
+                                    <span class="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 border border-purple-700 rounded-md text-xs font-bold text-white shadow-sm">
+                                        <i data-lucide="layers" class="w-3.5 h-3.5 text-white/90"></i>
+                                        Full Stack Development
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div id="tab-content-freelance" class="tab-content tab-hidden w-full">
+                                <div class="bg-gray-50/80 rounded-xl p-4 border border-gray-200">
+                                    <h3 class="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2">
+                                        Contract Services
+                                    </h3>
+                                    <p class="text-sm text-gray-600 mb-3">
+                                        Available for custom programming, system integrations, and freelance full-stack development.
+                                    </p>
+
+                                    <div class="pt-3 border-t border-gray-200">
+                                        <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">
+                                            Terms & Policy
+                                        </h3>
+                                        <p class="text-[10px] text-gray-400 leading-relaxed">
+                                            Payments processed securely via Stripe. Due to the nature of custom software development, no refunds are provided on delivered code or completed consulting hours.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -216,15 +259,33 @@
         // Initialize Icons
         lucide.createIcons();
 
-        // Check date to auto-hide the DevCon badge
-        const devconBadge = document.getElementById('devcon-badge');
-        if (devconBadge) {
-            // Cutoff date is March 1, 2026
-            const cutoffDate = new Date('2026-03-01T00:00:00');
-            const currentDate = new Date();
-            
-            if (currentDate >= cutoffDate) {
-                devconBadge.style.display = 'none';
+        function switchTab(tabName) {
+            const btnExpertise = document.getElementById('tab-btn-expertise');
+            const btnFreelance = document.getElementById('tab-btn-freelance');
+            const contentExpertise = document.getElementById('tab-content-expertise');
+            const contentFreelance = document.getElementById('tab-content-freelance');
+
+            const activeClasses = 'flex-1 md:flex-none px-4 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-gray-800 border border-gray-200 transition-all flex items-center justify-center gap-1.5';
+            const inactiveClasses = 'flex-1 md:flex-none px-4 py-1.5 text-xs font-bold rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-200/50 transition-all flex items-center justify-center gap-1.5';
+
+            if (tabName === 'expertise') {
+                btnExpertise.className = activeClasses;
+                btnFreelance.className = inactiveClasses;
+
+                contentFreelance.classList.remove('tab-active');
+                contentFreelance.classList.add('tab-hidden');
+
+                contentExpertise.classList.remove('tab-hidden');
+                contentExpertise.classList.add('tab-active');
+            } else {
+                btnFreelance.className = activeClasses;
+                btnExpertise.className = inactiveClasses;
+
+                contentExpertise.classList.remove('tab-active');
+                contentExpertise.classList.add('tab-hidden');
+
+                contentFreelance.classList.remove('tab-hidden');
+                contentFreelance.classList.add('tab-active');
             }
         }
 
